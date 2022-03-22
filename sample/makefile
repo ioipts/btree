@@ -32,7 +32,7 @@ endif
 INCFLAGS=-I$(LOCAL_PATH) -I$(PROJ_PATH) 
 
 SOURCES=$(PROJ_PATH)$(SEP)sample.cpp 
-SOURCES+=$(LOCAL_PATH)$(SEP)axisbtree.cpp$(SEP)
+SOURCES+=$(LOCAL_PATH)$(SEP)axisbtree.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
 OBJECTS+=$(CSOURCES:.c=.o)

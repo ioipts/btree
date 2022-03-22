@@ -1,6 +1,4 @@
 #include "axisbtree.h"
-#include "axisdbtable.h"
-#include "axisdblist.h"
 
 #define TESTNUM 1000000
 #define TESTFILE "test.btree"
