@@ -32,7 +32,7 @@ Multi-thread query
 Just copy all files and include in the project.  
 Enjoy!  
 
-## How to run the test
+## How to run the sample
 cd sample  
 make  
 ./testbtree
