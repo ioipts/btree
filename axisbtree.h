@@ -2,57 +2,38 @@
 #define AXISBTREE_H_
 
 /**
-* Balanced B-Tree for index
+* Adaptive B-Tree for index searching on file
 * 
-* Memcompare (can be used with string or integer)
+* Memcmp (can be used with string or integer)
 * Balancing when insert and delete.
-* Number of key must be even.
 * Iterative procedure. No recursive.
 * key always store n+1 (n+1 is the last node)
-* support non-unique key, but key+data must be unique.
-* set the maximum level of the tree to update numofchild 
-* binarysearch 
+* Using Binary Search 
 *
 * Insert at leaf only.
 * The tree grow up not down. When leaf is full, seperate 2 groups of the leaf and move the pivot up one level. 
 *
+* 1
+*
+* 1 2 
+*
+* 1 2 3
+*
+* 1 2 3 4 
+* 
+*    3
+* 1 2 4 5
+*
+*    3
+* 1 2 4 5 6 7 
+*    
+*    3   6
+* 1 2 4 5 7 8 
+*
+* 
 * Delete at leaf only. 
 * When delete, the tree will fall down. Try to merge sibling + parent down.
 *
-* 1M record (256nodes)
-* i7 1165g7 16G nvme
-* insert 
-*	 random 11sec (withoutnumofchild)
-* delete
-*    random 18sec 
-* 
-* 10M record (256nodes 3 level 680MB)
-* i7 1165g7 16G nvme
-* insert
-*     sorted 168sec (withnumofchild) 
-*     unique sorted 120sec (withoutnumofchild)
-* select
-*	  sorted pagination 100k search in 3sec (withnumofchild) 
-*	  unique sorted 100k in 1sec (withoutnumofchild)
-*	  unique sorted 8*25k in 1 sec (withoutnumofchild)
-* Apple M1
-* insert 
-*	  sorted 140sec (withnumofchild)
-*	  unique sorted 91sec (withoutnumofchild)
-* select 
-*	  unique sorted 300k in 1sec (withoutnumofchild)
-* 
-* 100M record (256nodes 5 level 6.4G)
-* Apple M1
-* insert 
-*	  unique sorted 1000sec (withoutnumofchild)
-* i9-11
-* insert 
-*     unique sorted  sec (withoutnumofchild) 
-*
-* 07/03/2022 insert, insertunique, select, selectedunique tested both 32 and 64 bit. memleak checked.
-* 20/03/2022 delete(withoutnumofchild)
-* 22/03/2022 delete(withnumofchild)
 */
 
 #include "databasetype.h"
@@ -220,8 +201,5 @@ DATABASETYPE countuniquerangebtree(axisbtree btree, const char* keyfrom, const c
 * for debug
 */
 void printbtree(const char* filename,int numblock);
-/*
-* for debug
-*/
-extern int btreedebug;
+
 #endif

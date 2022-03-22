@@ -1397,22 +1397,3 @@ void printbtree(const char* filename,int numblock)
 	FCLOSE(f);
 }
 
-//**************************** debug ***************************************
-int btreedebug = 0;
-
-void printstack(axisbtree btree, struct btreestack* stack, int levelindex)
-{
-	int keysize = btree->header.keysize;
-	for (int i = 0; i <= levelindex; i++)
-	{
-		axisbtreeblock b = stack[i].block;
-		printf("%d %d %d ", stack[i].seek, b->parentnode, b->num);
-		for (int j = 0; j <= b->num; j++)
-		{
-			axisbtreenode n = BTREEGETNODE(stack[i].block, j, keysize);
-			printf("%d(%d,%d) ", n->data, n->num, n->child);
-		}
-		printf("\n");
-	}
-}
-//****************************** debug **************************************

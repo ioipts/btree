@@ -6,11 +6,12 @@
 โค้ดส่วนนี้จะใช้สำหรับสร้าง ไฟล์สำหรับค้นหา (เช่นเดียวกับที่ใช้ในฐานข้อมูล)  
 เหมาะสำหรับงานที่ต้องการค้นหาในไฟล์ด้วยความเร็ว แต่มีข้อจำกัดเรื่องขนาดหน่วยความจำ หรือขนาดโปรแกรม  เช่นอุปกรณ์ IoT ที่ไม่สามารถลงฐานข้อมูลที่มีขนาดใหญ่และกินเนื้อที่ได้
 
-This little module will create an index file for searching with unique and non-unique key.  
-The algorithm is called Self-balancing b-tree.  
+This little module will create an index file for searching.  
+The algorithm is called Self-balancing B-Tree.  
 It can adapt by itself to serve random data and sorted data (both ascending and descending).  
 The length of the key and number of the key per node can be configured.  
-  
+This module is suitable for IoT project where database is not fit.
+
 ## Feature
 Written in C/C++98.  
 Support multi-platform.  
@@ -25,3 +26,12 @@ Bulk insert with sorted key
   
 Multi-thread query   
 600K queries in 1 sec  
+
+## How to use
+Just copy all files and include in the project.  
+Enjoy!  
+
+## How to run the test
+cd sample  
+make  
+./testbtree
