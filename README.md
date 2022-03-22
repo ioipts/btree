@@ -15,7 +15,8 @@ This module is suitable for IoT project where database is not fit.
 ## Feature
 Written in C/C++98.  
 Support multi-platform.  
-Support both 32-bit and 64-bit.  
+Support both 32-bit and 64-bit.
+Operation :Insert, Delete, Update, Upsert, Query distinct, Query between, Count between  
   
 ## Performance
 Tested on Apple MacBook M1 with sorted key (Complied for ARM) 
