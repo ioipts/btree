@@ -12,11 +12,11 @@ ifeq ($(OS),Darwin)
   SEP=/
   CN=rm -rf 
   CFLAGS=-c -Wall -Wno-address-of-packed-member -F/Library/Frameworks
-  LDFLAGS=-F/Library/Frameworks -lm -lpthread -ldl  
+  LDFLAGS=-F/Library/Frameworks -lm -ldl  
 else ifeq ($(OS),Linux)
   LOCAL_PATH=..
   PROJ_PATH=.
-  LDFLAGS=-lm -lpthread -ldl  
+  LDFLAGS=-lm -ldl  
   CFLAGS=-c -Wall -Wno-unused-result -O3 
   SEP=/
   CN=rm -rf
@@ -26,7 +26,7 @@ else ifeq ($(OS),Windows_NT)
   SEP=\\
   CN=del /q
   CFLAGS=-c -Wall -O3
-  LDFLAGS=-lm -lpthread 
+  LDFLAGS=-lm 
 endif
 
 INCFLAGS=-I$(LOCAL_PATH) -I$(PROJ_PATH) 
