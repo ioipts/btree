@@ -1,4 +1,4 @@
-# Self-Adaptive B-Tree
+# B-Tree
   
 ต้นไม้แบบบีที่สามารถ รักษาสมดุลในตัวเองได้ เมื่อมีการใส่ข้อมูล หรือลบข้อมูล   
 ต้นไม้จะปรับตัวเองเพื่อให้ค้นหาได้รวดเร็ว ไม่เอียงไปข้างใดข้างนึง  
@@ -7,7 +7,7 @@
 เหมาะสำหรับงานที่ต้องการค้นหาในไฟล์ด้วยความเร็ว แต่มีข้อจำกัดเรื่องขนาดหน่วยความจำ หรือขนาดโปรแกรม  เช่นอุปกรณ์ IoT ที่ไม่สามารถลงฐานข้อมูลที่มีขนาดใหญ่และกินเนื้อที่ได้
 
 This little module will create an index file for searching.  
-The algorithm is called Self-balancing B-Tree.  
+The algorithm is called B-Tree.  
 It can adapt by itself to serve random data and sorted data (both ascending and descending).  
 The length of the key and number of the key per node can be configured.  
 This module is suitable for IoT project where database is not fit.
