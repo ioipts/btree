@@ -4,10 +4,12 @@
 ต้นไม้จะปรับตัวเองเพื่อให้ค้นหาได้รวดเร็ว ไม่เอียงไปข้างใดข้างนึง  
 ไม่ว่าข้อมูลที่ได้รับจะมีการเรียงมากก่อน (เช่น เวลา)  
 โค้ดส่วนนี้จะใช้สำหรับสร้าง ไฟล์สำหรับค้นหา (เช่นเดียวกับที่ใช้ในฐานข้อมูล)  
+นอกจากนี้ในต้นไม้ยังเก็บ "จำนวนลูก" เพื่อที่จะช่วยในการนับและการข้ามการค้นหาได้เร็วขึ้น (offset)
 เหมาะสำหรับงานที่ต้องการค้นหาในไฟล์ด้วยความเร็ว แต่มีข้อจำกัดเรื่องขนาดหน่วยความจำ หรือขนาดโปรแกรม  เช่นอุปกรณ์ IoT ที่ไม่สามารถลงฐานข้อมูลที่มีขนาดใหญ่และกินเนื้อที่ได้
 
 This little module will create an index file for searching.  
-The algorithm is called B-Tree.  
+The algorithm is called B-Tree. 
+The number of child is added in every nodes to speed up counting and skipping.
 It can adapt by itself to serve random data and sorted data (both ascending and descending).  
 The length of the key and number of the key per node can be configured.  
 This module is suitable for IoT project where database is not fit.
