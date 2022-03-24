@@ -186,7 +186,7 @@ FORCE_INLINE bool btreegrowup(axisbtree btree,struct btreestack* stack, int leve
 			SETMEM(rnode->key, 0, keysize);
 			rnode->child=BTREEHEADERSIZE+(btree->header.numblock+1)*blocksize;
 			//update numofchild
-			if ((btree->header.type & AXISBTREECOUNTTYPE) == AXISBTREECOUNTTYPE) {
+			if ((btree->header.type & AXISBTREEPLUSTYPE) == AXISBTREEPLUSTYPE) {
 				lnode->num = 0;
 				for (int i = 0; i <=lblock->num; i++) {
 					axisbtreenode node = BTREEGETNODE(lblock, i, keysize);
@@ -293,7 +293,7 @@ FORCE_INLINE bool btreegrowup(axisbtree btree,struct btreestack* stack, int leve
 				CPYMEM(BTREEGETNODE(block, block->num + 1, keysize),&lastnode, BTREENODESIZE(keysize));
 			}
 			//update numofchild 
-			if ((btree->header.type & AXISBTREECOUNTTYPE) == AXISBTREECOUNTTYPE) {
+			if ((btree->header.type & AXISBTREEPLUSTYPE) == AXISBTREEPLUSTYPE) {
 				//left
 				n->num = 0;	//sum
 				for (int j = 0; j <= lblock->num; j++)
@@ -315,7 +315,7 @@ FORCE_INLINE bool btreegrowup(axisbtree btree,struct btreestack* stack, int leve
 	//update parent here 
 	FSEEK(btree->f, stack[levelindex].seek, SEEK_SET);
 	FWRITE(block, blocksize, 1, btree->f);
-	if ((btree->header.type & AXISBTREECOUNTTYPE)==AXISBTREECOUNTTYPE) btreeshift(btree,stack,levelindex,1);	
+	if ((btree->header.type & AXISBTREEPLUSTYPE)==AXISBTREEPLUSTYPE) btreeshift(btree,stack,levelindex,1);	
 	btree->header.numnode++;
 	return true;
 }
@@ -392,7 +392,7 @@ FORCE_INLINE bool btreeuniquegrowup(axisbtree btree, struct btreestack* stack, i
 			SETMEM(rnode->key, 0, keysize);
 			rnode->child = BTREEHEADERSIZE + (btree->header.numblock + 1) * blocksize;
 			//update numofchild
-			if ((btree->header.type & AXISBTREECOUNTTYPE) == AXISBTREECOUNTTYPE) {
+			if ((btree->header.type & AXISBTREEPLUSTYPE) == AXISBTREEPLUSTYPE) {
 				lnode->num = 0;
 				for (int i = 0; i <= lblock->num; i++) {
 					axisbtreenode node = BTREEGETNODE(lblock, i, keysize);
@@ -500,7 +500,7 @@ FORCE_INLINE bool btreeuniquegrowup(axisbtree btree, struct btreestack* stack, i
 				CPYMEM(BTREEGETNODE(block, block->num + 1, keysize), &lastnode, BTREENODESIZE(keysize));
 			}
 			//update numofchild 
-			if ((btree->header.type & AXISBTREECOUNTTYPE) == AXISBTREECOUNTTYPE) {
+			if ((btree->header.type & AXISBTREEPLUSTYPE) == AXISBTREEPLUSTYPE) {
 				//left
 				n->num = 0;	//sum
 				for (int j = 0; j <= lblock->num; j++)
@@ -522,7 +522,7 @@ FORCE_INLINE bool btreeuniquegrowup(axisbtree btree, struct btreestack* stack, i
 	//update parent here 
 	FSEEK(btree->f, stack[levelindex].seek, SEEK_SET);
 	FWRITE(block, blocksize, 1, btree->f);
-	if ((btree->header.type & AXISBTREECOUNTTYPE) == AXISBTREECOUNTTYPE) btreeshift(btree, stack, levelindex, 1);
+	if ((btree->header.type & AXISBTREEPLUSTYPE) == AXISBTREEPLUSTYPE) btreeshift(btree, stack, levelindex, 1);
 	btree->header.numnode++;
 	if (levelindex > btree->header.maxlevel) btree->header.maxlevel = levelindex;
 	return true;
@@ -680,7 +680,7 @@ bool insertbtree(axisbtree btree, const char* key, DATABASETYPE id)
 			FSEEK(btree->f, seek + BTREESEEKNODE(i, keysize) + sizeof(DATABASETYPE), SEEK_SET);
 			FWRITE(&node->child, sizeof(DATABASETYPE), 1, btree->f);
 			//update header
-			if ((btree->header.type & AXISBTREECOUNTTYPE)==AXISBTREECOUNTTYPE) btreeshift(btree, stack, levelindex,1);
+			if ((btree->header.type & AXISBTREEPLUSTYPE)==AXISBTREEPLUSTYPE) btreeshift(btree, stack, levelindex,1);
 			btree->header.numnode++;
 			if (levelindex > btree->header.maxlevel) btree->header.maxlevel = levelindex;
 			btree->header.numblock++;
@@ -745,7 +745,7 @@ bool insertuniquebtree(axisbtree btree, const char* key, DATABASETYPE id,bool up
 			FSEEK(btree->f, seek + BTREESEEKNODE(i, keysize) + sizeof(DATABASETYPE), SEEK_SET);
 			FWRITE(&node->child, sizeof(DATABASETYPE), 1, btree->f);
 			//update header
-			if ((btree->header.type & AXISBTREECOUNTTYPE) == AXISBTREECOUNTTYPE) btreeshift(btree, stack, levelindex, 1);
+			if ((btree->header.type & AXISBTREEPLUSTYPE) == AXISBTREEPLUSTYPE) btreeshift(btree, stack, levelindex, 1);
 			btree->header.numnode++;
 			if (levelindex > btree->header.maxlevel) btree->header.maxlevel = levelindex;
 			btree->header.numblock++;
@@ -988,7 +988,7 @@ FORCE_INLINE bool btreefalldown(axisbtree btree, struct btreestack* stack, int l
 		FWRITE(stack[i].block,blocksize,1, btree->f);
 	}
 	//update numofchild 
-	if ((btree->header.type & AXISBTREECOUNTTYPE) == AXISBTREECOUNTTYPE) {
+	if ((btree->header.type & AXISBTREEPLUSTYPE) == AXISBTREEPLUSTYPE) {
 		for (int i = 0; i < levelindex; i++)
 			if (stack[i].block->num != 0)
 			{
@@ -1301,9 +1301,6 @@ DATABASETYPE selectbtree(axisbtree btree, const char* key, DATABASETYPE offset, 
 			if (memcmp(key,node->key, keysize) == 0) {		//select
 				if (ret < offset + limit) {
 					if (ret >= offset)  value[ret - offset] = node->data;
-					if (node->data == 183) {
-						ret = ret;
-					}
 					ret++;
 				}
 			}
@@ -1316,12 +1313,126 @@ DATABASETYPE selectbtree(axisbtree btree, const char* key, DATABASETYPE offset, 
 
 DATABASETYPE selectrangebtree(axisbtree btree, const char* keyfrom, const char* keyto, DATABASETYPE offset, DATABASETYPE limit, DATABASETYPE* value)
 {
-	return 0;
+	int ret = 0;
+	int keysize = btree->header.keysize;
+	int blocksize = BTREEBLOCKSIZE(btree->header.keysize, btree->header.numkey);
+	//get root level
+	FSEEK(btree->f, BTREEHEADERSIZE, SEEK_SET);
+	FREAD(btree->block, blocksize, 1, btree->f);
+	int rootlevel = btree->header.maxlevel;
+	int levelindex = 0;
+	struct btreestack* stack = initbtreestack(btree->block, blocksize, rootlevel);
+	while ((levelindex >= 0) && (ret < offset + limit)) {
+		axisbtreeblock block = stack[levelindex].block;
+		bool end = false;
+		while ((!end) && (stack[levelindex].i <= block->num))	//= block->num for including last node
+		{
+			axisbtreenode node = BTREEGETNODE(block, stack[levelindex].i, keysize);
+			int r = (stack[levelindex].i == block->num) ? -2 : memcmp(keyfrom, node->key, keysize);
+			if (r <= 0) {						//including last node
+				if (node->child > 0) {
+					//optimized
+					if ((stack[levelindex].i != block->num) && (memcmp(keyto, node->key, keysize) >= 0) && (ret > 0) && (node->num != 0) && (ret + node->num + 1 < offset))
+					{
+						ret += node->num + 1;
+						stack[levelindex].i++;
+					}
+					else {
+						levelindex++;
+						FSEEK(btree->f, node->child, SEEK_SET);
+						FREAD(stack[levelindex].block, blocksize, 1, btree->f);
+						stack[levelindex].i = 0;
+						block = stack[levelindex].block;
+					}
+				}
+				else {
+					if ((stack[levelindex].i != block->num) && (memcmp(keyto, node->key, keysize) >= 0)) {		//select
+						if (ret < offset + limit) {
+							if (ret >= offset)  value[ret - offset] = node->data;
+							ret++;
+						}
+						stack[levelindex].i++;
+					}
+					else end = true;
+				}
+			}
+			else
+				stack[levelindex].i++;
+		}
+		levelindex--;
+		if (levelindex >= 0) {		//select the parent node too
+			end = false;
+			axisbtreenode node = BTREEGETNODE(stack[levelindex].block, stack[levelindex].i, keysize);
+			if (memcmp(keyto, node->key, keysize) >= 0) {		//select
+				if (ret < offset + limit) {
+					if (ret >= offset)  value[ret - offset] = node->data;
+					ret++;
+				}
+			}
+			stack[levelindex].i++;
+		}
+	}
+	destroybtreestack(stack, rootlevel);
+	return (ret > offset) ? ret - offset : 0;
 }
 
-DATABASETYPE countrangebtree(axisbtree btree, const char* key)
+DATABASETYPE countrangebtree(axisbtree btree, const char* keyfrom,const char* keyto)
 {
-	return 0;
+	int ret = 0;
+	int keysize = btree->header.keysize;
+	int blocksize = BTREEBLOCKSIZE(btree->header.keysize, btree->header.numkey);
+	//get root level
+	FSEEK(btree->f, BTREEHEADERSIZE, SEEK_SET);
+	FREAD(btree->block, blocksize, 1, btree->f);
+	int rootlevel = btree->header.maxlevel;
+	int levelindex = 0;
+	struct btreestack* stack = initbtreestack(btree->block, blocksize, rootlevel);
+	while (levelindex >= 0) {
+		axisbtreeblock block = stack[levelindex].block;
+		bool end = false;
+		while ((!end) && (stack[levelindex].i <= block->num))	//= block->num for including last node
+		{
+			axisbtreenode node = BTREEGETNODE(block, stack[levelindex].i, keysize);
+			int r = (stack[levelindex].i == block->num) ? -2 : memcmp(keyfrom, node->key, keysize);
+			if (r <= 0) {						//including last node
+				if (node->child > 0) {
+					//optimized
+					if ((stack[levelindex].i != block->num) && (memcmp(keyto, node->key, keysize) >= 0) && (node->num != 0))
+					{
+						ret += node->num;
+						stack[levelindex].i++;
+					}
+					else {
+						levelindex++;
+						FSEEK(btree->f, node->child, SEEK_SET);
+						FREAD(stack[levelindex].block, blocksize, 1, btree->f);
+						stack[levelindex].i = 0;
+						block = stack[levelindex].block;
+					}
+				}
+				else {
+					if ((stack[levelindex].i != block->num) && (memcmp(keyto, node->key, keysize) >= 0)) {		//select
+						ret++;
+						stack[levelindex].i++;
+					}
+					else end = true;
+				}
+			}
+			else
+				stack[levelindex].i++;
+		}
+		levelindex--;
+		if (levelindex >= 0) {		//select the parent node too
+			end = false;
+			axisbtreenode node = BTREEGETNODE(stack[levelindex].block, stack[levelindex].i, keysize);
+			if (memcmp(keyto, node->key, keysize) >= 0) {		//select
+				ret++;
+			}
+			stack[levelindex].i++;
+		}
+	}
+	destroybtreestack(stack, rootlevel);
+	return ret;
 }
 
 bool selectuniquebtree(axisbtree btree, const char* key,DATABASETYPE* ret)
@@ -1345,12 +1456,151 @@ bool selectuniquebtree(axisbtree btree, const char* key,DATABASETYPE* ret)
 
 DATABASETYPE selectuniquerangebtree(axisbtree btree, const char* keyfrom, const char* keyto, DATABASETYPE offset, DATABASETYPE limit, DATABASETYPE* value)
 {
-	return 0;
+	int ret = 0;
+	int keysize = btree->header.keysize;
+	int blocksize = BTREEBLOCKSIZE(btree->header.keysize, btree->header.numkey);
+	//get root level
+	FSEEK(btree->f, BTREEHEADERSIZE, SEEK_SET);
+	FREAD(btree->block, blocksize, 1, btree->f);
+	int rootlevel = btree->header.maxlevel;
+	int levelindex = 0;
+	struct btreestack* stack = initbtreestack(btree->block, blocksize, rootlevel);
+	bool end = false;
+	while ((!end) && (levelindex >= 0) && (ret < offset + limit)) {
+		axisbtreeblock block = stack[levelindex].block;
+		while ((!end) && (stack[levelindex].i <= block->num))	//= block->num for including last node
+		{
+			axisbtreenode node = BTREEGETNODE(block, stack[levelindex].i, keysize);
+			int r = (stack[levelindex].i == block->num) ? -2 : memcmp(keyfrom, node->key, keysize);
+			if (r < 0) {						//including last node
+				if (node->child > 0) {
+					//optimized
+					r = (stack[levelindex].i == block->num) ? -2 : memcmp(keyto, node->key, keysize);
+					if ((r >= 0) && (ret > 0) && (node->num != 0) && (ret + node->num + 1 < offset))
+					{
+						ret += node->num + 1;					
+						if (r == 0) end = true;
+						else stack[levelindex].i++; 
+					}
+					else {
+						levelindex++;
+						FSEEK(btree->f, node->child, SEEK_SET);
+						FREAD(stack[levelindex].block, blocksize, 1, btree->f);
+						stack[levelindex].i = 0;
+						block = stack[levelindex].block;
+					}
+				}
+				else {
+					r = (stack[levelindex].i == block->num)? -2:memcmp(keyto, node->key, keysize);
+					if (r >= 0) {		//select
+						if (ret < offset + limit) {
+							if (ret >= offset)  value[ret - offset] = node->data;
+							ret++;
+						}
+						if (r == 0) end = true;
+						else stack[levelindex].i++;
+					}
+					else {
+						stack[levelindex].i++;
+						if (r == -1) end = true;
+					}
+				}
+			}
+			else if (r == 0) {
+				//select
+				if (ret < offset + limit) {
+					if (ret >= offset) value[ret - offset] = node->data;
+					ret++;
+				}
+				else end = true;
+				stack[levelindex].i++;
+			}
+			else
+				stack[levelindex].i++;
+		}
+		levelindex--;
+		if (levelindex >= 0) {		//select the parent node too
+			axisbtreenode node = BTREEGETNODE(stack[levelindex].block, stack[levelindex].i, keysize);
+			if (memcmp(keyto, node->key, keysize) >= 0) {		//select
+				if (ret < offset + limit) {
+					if (ret >= offset)  value[ret - offset] = node->data;
+					ret++;
+				}
+			}
+			stack[levelindex].i++;
+		}
+	}
+	destroybtreestack(stack, rootlevel);
+	return (ret > offset) ? ret - offset : 0;
 }
 
 DATABASETYPE countuniquerangebtree(axisbtree btree, const char* keyfrom, const char* keyto)
 {
-	return 0;
+	int ret = 0;
+	int keysize = btree->header.keysize;
+	int blocksize = BTREEBLOCKSIZE(btree->header.keysize, btree->header.numkey);
+	//get root level
+	FSEEK(btree->f, BTREEHEADERSIZE, SEEK_SET);
+	FREAD(btree->block, blocksize, 1, btree->f);
+	int rootlevel = btree->header.maxlevel;
+	int levelindex = 0;
+	struct btreestack* stack = initbtreestack(btree->block, blocksize, rootlevel);
+	bool end = false;
+	while ((!end) && (levelindex >= 0)) {
+		axisbtreeblock block = stack[levelindex].block;
+		while ((!end) && (stack[levelindex].i <= block->num))	//= block->num for including last node
+		{
+			axisbtreenode node = BTREEGETNODE(block, stack[levelindex].i, keysize);
+			int r = (stack[levelindex].i == block->num) ? -2 : memcmp(keyfrom, node->key, keysize);
+			if (r < 0) {						//including last node
+				if (node->child > 0) {
+					//optimized
+					r = (stack[levelindex].i == block->num) ? -2 : memcmp(keyto, node->key, keysize);
+					if ((r>= 0) && (node->num != 0) && (ret>0))
+					{
+						ret += node->num+1;
+						if (r == 0) end = true;
+						else stack[levelindex].i++;
+					} else {
+						levelindex++;
+						FSEEK(btree->f, node->child, SEEK_SET);
+						FREAD(stack[levelindex].block, blocksize, 1, btree->f);
+						stack[levelindex].i = 0;
+						block = stack[levelindex].block;
+					}
+				}
+				else {
+					r = (stack[levelindex].i == block->num) ? -2 : memcmp(keyto, node->key, keysize);
+					if (r>=0) {		//select
+						ret++;
+						if (r == 0) end = true;
+						else stack[levelindex].i++;
+					}
+					else {
+						stack[levelindex].i++;
+						if (r == -1) end = true;
+					}
+				}
+			}
+			else if (r == 0) {
+				//select
+				ret++;
+				stack[levelindex].i++;
+			}
+			else
+				stack[levelindex].i++;
+		}
+		levelindex--;
+		if (levelindex >= 0) {		//select the parent node too
+			axisbtreenode node = BTREEGETNODE(stack[levelindex].block, stack[levelindex].i, keysize);
+			if ((stack[levelindex].i!=stack[levelindex].block->num) && (memcmp(keyto, node->key, keysize) >= 0)) {		//select
+				ret++;
+			}
+			stack[levelindex].i++;
+		}
+	}
+	destroybtreestack(stack, rootlevel);
+	return ret;
 }
 
 void lockbtree(axisbtree btree)
@@ -1396,4 +1646,3 @@ void printbtree(const char* filename,int numblock)
 	FREEMEM(block);
 	FCLOSE(f);
 }
-

@@ -50,7 +50,7 @@
 /**
 * Insert num of child
 */
-#define AXISBTREECOUNTTYPE 2
+#define AXISBTREEPLUSTYPE 2
 
 #pragma pack(push,1)
 
@@ -188,7 +188,7 @@ bool deleteuniquebtree(axisbtree btree, const char* key);
 */
 DATABASETYPE selectbtree(axisbtree btree, const char* key,DATABASETYPE offset,DATABASETYPE limit,DATABASETYPE* value);
 DATABASETYPE selectrangebtree(axisbtree btree, const char* keyfrom, const char* keyto, DATABASETYPE offset, DATABASETYPE limit, DATABASETYPE* value);
-DATABASETYPE countrangebtree(axisbtree btree, const char* key);
+DATABASETYPE countrangebtree(axisbtree btree, const char* keyfrom,const char* keyto);
 
 /**
 * @return true if found

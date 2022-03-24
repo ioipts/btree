@@ -5,7 +5,7 @@
 
 int main(int argc, char** argv)
 {
-	axisbtree b = createbtree(TESTFILE, 8, 64, AXISBTREECOUNTTYPE, 0);
+	axisbtree b = createbtree(TESTFILE, 8, 64, AXISBTREEPLUSTYPE, 0);
 	for (int i = 0; i < TESTNUM; i++)
 	{
 		insertbtree(b, "data", i);
