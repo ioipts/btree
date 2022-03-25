@@ -29,6 +29,8 @@ int main(int argc, char** argv)
 	{
 		printf("%d ", value[i]);
 	}
+	ret=countrangebtree(b,"data","data");
+	ret=selectrangebtree(b,"data","data",790,20,value);
 	printf("\n");
 	destroybtree(b);
 	return 0;

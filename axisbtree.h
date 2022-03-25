@@ -2,7 +2,7 @@
 #define AXISBTREE_H_
 
 /**
-* Adaptive B-Tree for index searching on file
+* B-Tree for index searching on file
 * 
 * Memcmp (can be used with string or integer)
 * Balancing when insert and delete.
