@@ -1363,7 +1363,7 @@ DATABASETYPE selectrangebtree(axisbtree btree, const char* keyfrom, const char* 
 		if (levelindex >= 0) {		//select the parent node too
 			end = false;
 			axisbtreenode node = BTREEGETNODE(stack[levelindex].block, stack[levelindex].i, keysize);
-			if (memcmp(keyto, node->key, keysize) >= 0) {		//select
+			if ((stack[levelindex].i != stack[levelindex].block->num) && (memcmp(keyto, node->key, keysize) >= 0)) {		//select
 				if (ret < offset + limit) {
 					if (ret >= offset)  value[ret - offset] = node->data;
 					ret++;
@@ -1397,9 +1397,10 @@ DATABASETYPE countrangebtree(axisbtree btree, const char* keyfrom,const char* ke
 			if (r <= 0) {						//including last node
 				if (node->child > 0) {
 					//optimized
-					if ((stack[levelindex].i != block->num) && (memcmp(keyto, node->key, keysize) >= 0) && (node->num != 0))
+					r = (stack[levelindex].i == block->num) ? -2 : memcmp(keyto, node->key, keysize);
+					if ((r >= 0) && (node->num != 0) && (ret > 0))
 					{
-						ret += node->num;
+						ret += node->num+1;
 						stack[levelindex].i++;
 					}
 					else {
@@ -1411,7 +1412,8 @@ DATABASETYPE countrangebtree(axisbtree btree, const char* keyfrom,const char* ke
 					}
 				}
 				else {
-					if ((stack[levelindex].i != block->num) && (memcmp(keyto, node->key, keysize) >= 0)) {		//select
+					r = (stack[levelindex].i == block->num) ? -2 : memcmp(keyto, node->key, keysize);
+					if (r>=0) {		//select
 						ret++;
 						stack[levelindex].i++;
 					}
@@ -1425,7 +1427,7 @@ DATABASETYPE countrangebtree(axisbtree btree, const char* keyfrom,const char* ke
 		if (levelindex >= 0) {		//select the parent node too
 			end = false;
 			axisbtreenode node = BTREEGETNODE(stack[levelindex].block, stack[levelindex].i, keysize);
-			if (memcmp(keyto, node->key, keysize) >= 0) {		//select
+			if ((stack[levelindex].i != stack[levelindex].block->num) && (memcmp(keyto, node->key, keysize) >= 0)) {		//select
 				ret++;
 			}
 			stack[levelindex].i++;
@@ -1521,7 +1523,7 @@ DATABASETYPE selectuniquerangebtree(axisbtree btree, const char* keyfrom, const 
 		levelindex--;
 		if (levelindex >= 0) {		//select the parent node too
 			axisbtreenode node = BTREEGETNODE(stack[levelindex].block, stack[levelindex].i, keysize);
-			if (memcmp(keyto, node->key, keysize) >= 0) {		//select
+			if ((stack[levelindex].i != stack[levelindex].block->num) && (memcmp(keyto, node->key, keysize) >= 0)) {		//select
 				if (ret < offset + limit) {
 					if (ret >= offset)  value[ret - offset] = node->data;
 					ret++;
