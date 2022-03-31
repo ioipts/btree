@@ -11,6 +11,9 @@ ifeq ($(OS),Darwin)
   PROJ_PATH=.
   SEP=/
   CN=rm -rf 
+  #support for Mac M1 x86_64
+  #CFLAGS=-c -Wall -Wno-address-of-packed-member -F/Library/Frameworks -target x86_64-apple-macos11.00
+  #LDFLAGS=-F/Library/Frameworks -target x86_64-apple-macos11.00 
   CFLAGS=-c -Wall -Wno-address-of-packed-member -F/Library/Frameworks
   LDFLAGS=-F/Library/Frameworks -lm -ldl  
 else ifeq ($(OS),Linux)
